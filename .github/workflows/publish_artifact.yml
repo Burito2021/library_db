@@ -1,8 +1,8 @@
 name: Build Flyway Image
 on:
   push:
-    branches: [main, 'feature/*']
-    paths: ['sql/**']
+    branches: [main, 'feature/*', 'feature/add_flyway']
+#    paths: ['sql/**']
 
 jobs:
   build:
