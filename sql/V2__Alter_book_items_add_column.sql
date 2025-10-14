@@ -1,0 +1,1 @@
+ALTER TABLE book_items ADD COLUMN version BIGINT DEFAULT 0;
