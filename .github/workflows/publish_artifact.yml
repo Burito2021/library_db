@@ -5,7 +5,7 @@ on:
     branches: [main, 'feature/*', 'feature/add_flyway']
     paths:
       - 'sql/**'
-      - '.github/workflows/build-postgres-migrated.yml'
+      - '.github/workflows/publish_artifact.yml'
 
 env:
   REGISTRY: ghcr.io
