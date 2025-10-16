@@ -204,6 +204,6 @@ CREATE TABLE public.flyway_schema_history (
 );
 CREATE INDEX flyway_schema_history_s_idx ON public.flyway_schema_history USING btree (success);
 
-INSERT INTO public.flyway_schema_history
-(installed_rank, "version", description, "type", script, checksum, installed_by, installed_on, execution_time, success)
-VALUES(1, '101420251200', 'initial schema', 'SQL', 'V101420251200__initial_schema.sql', -350929858, 'library_user', '2025-10-16 16:17:55.222', 100, true);
+-- INSERT INTO public.flyway_schema_history
+-- (installed_rank, "version", description, "type", script, checksum, installed_by, installed_on, execution_time, success)
+-- VALUES(1, '101420251200', 'initial schema', 'SQL', 'V101420251200__initial_schema.sql', -350929858, 'library_user', '2025-10-16 16:17:55.222', 100, true);
