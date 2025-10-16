@@ -2,7 +2,7 @@ name: Build PostgreSQL with Flyway Migrations
 
 on:
   push:
-    branches: [main]
+    branches: [main, 'feature/*', 'feature/add_flyway']
     paths:
       - 'sql/**'
       - '.github/workflows/build-postgres-migrated.yml'
