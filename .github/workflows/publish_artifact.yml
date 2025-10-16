@@ -9,7 +9,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: burito2021/library_db-postgres-migrated
+  IMAGE_NAME: burito2021/library_db-postgres:15
 
 jobs:
   build-postgres-migrated:
