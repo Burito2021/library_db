@@ -23,3 +23,11 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/burito2021/library_db:latest
+
+      - name: Build and push PostgreSQL image with initial schema
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile.postgres
+          push: true
+          tags: ghcr.io/burito2021/library_db-postgres:15

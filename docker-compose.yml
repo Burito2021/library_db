@@ -16,6 +16,12 @@ services:
     image: flyway/flyway:11.14.0
     container_name: flyway
     command: migrate
+#    environment:
+#      - FLYWAY_URL=jdbc:postgresql://postgres:5432/library_db
+#      - FLYWAY_USER=library_user
+#      - FLYWAY_PASSWORD=library_password
+#      - FLYWAY_SCHEMAS=public
+#      - FLYWAY_LOCATIONS=filesystem:/flyway/sql
     volumes:
       - ./flyway.conf:/flyway/conf/flyway.conf
       - ./sql:/flyway/sql
