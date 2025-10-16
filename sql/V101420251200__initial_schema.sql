@@ -188,3 +188,22 @@ CREATE TRIGGER BOOK_ITEM_HISTORY_TRIGGER_UPDATE
     WHEN (OLD.BORROWED_AT IS DISTINCT FROM NEW.BORROWED_AT
       OR OLD.RETURNED_AT IS DISTINCT FROM NEW.RETURNED_AT)
 EXECUTE FUNCTION log_to_book_item_history();
+
+CREATE TABLE public.flyway_schema_history (
+                                              installed_rank int4 NOT NULL,
+                                              "version" varchar(50) NULL,
+                                              description varchar(200) NOT NULL,
+                                              "type" varchar(20) NOT NULL,
+                                              script varchar(1000) NOT NULL,
+                                              checksum int4 NULL,
+                                              installed_by varchar(100) NOT NULL,
+                                              installed_on timestamp DEFAULT now() NOT NULL,
+                                              execution_time int4 NOT NULL,
+                                              success bool NOT NULL,
+                                              CONSTRAINT flyway_schema_history_pk PRIMARY KEY (installed_rank)
+);
+CREATE INDEX flyway_schema_history_s_idx ON public.flyway_schema_history USING btree (success);
+
+INSERT INTO public.flyway_schema_history
+(installed_rank, "version", description, "type", script, checksum, installed_by, installed_on, execution_time, success)
+VALUES(1, '101420251200', 'initial schema', 'SQL', 'V101420251200__initial_schema.sql', -991396472, 'library_user', '2025-10-16 16:17:55.222', 100, true);
