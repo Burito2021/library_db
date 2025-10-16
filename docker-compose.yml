@@ -11,6 +11,11 @@ services:
       - "5432:5432"
     volumes:
         - ./sql/V101420251200__initial_schema.sql:/docker-entrypoint-initdb.d/02-schema.sql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U library_user -d library_db" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   flyway:
     image: flyway/flyway:11.14.0
@@ -29,7 +34,9 @@ services:
       - ./flyway.conf:/flyway/conf/flyway.conf
       - ./sql:/flyway/sql
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+
 
 
 volumes:

@@ -2,14 +2,14 @@ name: Build PostgreSQL with Flyway Migrations
 
 on:
   push:
-    branches: [main, 'feature/*', 'feature/add_flyway']
+    branches: [main]
     paths:
       - 'sql/**'
       - '.github/workflows/publish_artifact.yml'
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: burito2021/library_db-postgres:15
+  IMAGE_NAME: burito2021/library-postgres
 
 jobs:
   build-postgres-migrated:

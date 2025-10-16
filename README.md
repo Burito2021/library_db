@@ -3,11 +3,10 @@
 ### Prerequisites
 - Docker and Docker Compose installed
 
-# Start Database (in this folder)
-docker-compose up postgres -d
+# Start Docker-compose (in this folder)
+docker-compose up -d
 
-# Run Publish
-docker-compose run flyway (or docker-compose up flyway)
-
-# Verify Publish
+# Verify Publish if needed
 docker-compose run flyway info
+
+

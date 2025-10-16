@@ -1,3 +1,0 @@
-FROM postgres:15
-
-COPY sql/V101420251200__initial_schema.sql /docker-entrypoint-initdb.d/
