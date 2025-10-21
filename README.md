@@ -1,3 +1,12 @@
-# library_db
-structure of for flyway 
-copy schemas and put into correct folders
+## Local Usage
+
+### Prerequisites
+- Docker and Docker Compose installed
+
+# Start Docker-compose (in this folder)
+docker-compose up -d
+
+# Verify Publish if needed
+docker-compose run flyway info
+
+
