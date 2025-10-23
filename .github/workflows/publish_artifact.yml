@@ -1,0 +1,94 @@
+name: Build PostgreSQL with Flyway Migrations
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'sql/**'
+      - '.github/workflows/publish_artifact.yml'
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: burito2021/library-postgres
+
+jobs:
+  build-postgres-migrated:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Start PostgreSQL for migration
+        run: |
+          docker run -d \
+            --name temp-postgres \
+            -e POSTGRES_DB=library_db \
+            -e POSTGRES_USER=library_user \
+            -e POSTGRES_PASSWORD=library_password \
+            -p 5432:5432 \
+            postgres:15
+
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          until docker exec temp-postgres pg_isready -U library_user -d library_db; do
+            echo "Waiting for PostgreSQL..."
+            sleep 2
+          done
+          echo "PostgreSQL is ready!"
+
+      - name: Run Flyway migrations
+        run: |
+          docker run --rm \
+            --network container:temp-postgres \
+            -v ${{ github.workspace }}/sql:/flyway/sql \
+            flyway/flyway:latest \
+            -url=jdbc:postgresql://localhost:5432/library_db \
+            -user=library_user \
+            -password=library_password \
+            -locations=filesystem:/flyway/sql \
+            migrate
+
+      - name: Export migrated database
+        run: |
+          docker exec temp-postgres pg_dump \
+            -U library_user \
+            -d library_db \
+            --no-owner \
+            --no-privileges \
+            > migrated_schema.sql
+
+      - name: Stop temporary PostgreSQL
+        run: docker stop temp-postgres && docker rm temp-postgres
+
+      - name: Create Dockerfile for migrated image
+        run: |
+          cat > Dockerfile << 'EOF'
+          FROM postgres:15
+          COPY migrated_schema.sql /docker-entrypoint-initdb.d/01-migrated-schema.sql
+          ENV POSTGRES_DB=library_db
+          ENV POSTGRES_USER=library_user
+          ENV POSTGRES_PASSWORD=library_password
+          EOF
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:15
+
+      - name: Clean up
+        run: rm -f migrated_schema.sql Dockerfile
