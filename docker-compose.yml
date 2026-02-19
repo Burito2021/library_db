@@ -10,7 +10,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-        - ./sql/V101420251200__initial_schema.sql:/docker-entrypoint-initdb.d/02-schema.sql
+        - ./sql/V202510141200__initial_schema.sql:/docker-entrypoint-initdb.d/02-schema.sql
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U library_user -d library_db" ]
       interval: 5s
