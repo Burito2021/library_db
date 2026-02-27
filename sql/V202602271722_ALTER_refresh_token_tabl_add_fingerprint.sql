@@ -1,0 +1,1 @@
+ALTER TABLE refresh_tokens ADD column fingerprint varchar(500) NOT NULL;
